@@ -1,7 +1,9 @@
+import PokemonType from "../components/PokemonType"
+
 function App() {
   return (
     <>
-      app.tsx
+      <PokemonType />
     </>
   )
 }
