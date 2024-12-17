@@ -22,5 +22,6 @@ export default function PokemonType({type}: {type: string}) {
         { type: 'water', hex: "#6890F0" }
     ];
 
-    return <span className="pokemon-type" style={{ backgroundColor: colors.find(c => c.type === type)?.hex }}>plante</span>
+    return <span className="pokemon-type" style={{backgroundColor: colors.find(c => c.type === type)?.hex}}>{type}</span>
+
 }
