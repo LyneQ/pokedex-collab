@@ -1,9 +1,9 @@
-import { useParams } from 'react-router';
-import { useEffect, useState } from 'react';
+import {useParams} from 'react-router';
+import {useEffect, useState} from 'react';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import CanvasJSReact from '@canvasjs/react-charts';
-import type { PokemonData } from '../types/interfaces';
+import type {PokemonData, evolutionChain} from '../types/interfaces';
 import '../assets/scss/routes/Pokemon.scss';
 import PokemonType from "../components/PokemonType.tsx";
 import AudioPlayer from "../components/AudioPlayer.tsx";
@@ -17,6 +17,13 @@ export default function Pokemon() {
     const [pokemonData, setPokemonData] = useState<PokemonData | null>(null);
     const [pokemonSpecies, setPokemonSpecies] = useState<PokemonData | null>(null);
     const [pokemonWeakness, setPokemonWeakness] = useState<string[]>([]);
+    const [evolutionChain, setEvolutionChain] = useState<evolutionChain[]>([]);
+
+    const getPokemonIdFromName = async (name: string) => {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const data = await response.json();
+        return data.id;
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,44 +75,59 @@ export default function Pokemon() {
         getWeakness();
     }, [params.id]);
     useEffect(() => {
-        if (pokemonData) {
-            console.log(pokemonData);
-        } else if (pokemonSpecies) {
-            console.log(pokemonSpecies);
-        }
-    }, [pokemonData, pokemonSpecies]);
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${params.id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                fetch(data.evolution_chain.url)
+                    .then((response) => response.json())
+                    .then(async (data) => {
+                        const evolutionChain = [];
+                        let current = data.chain;
+                        while (current) {
+                            const name = current.species.name;
+                            const id = await getPokemonIdFromName(name);
+                            evolutionChain.push({
+                                species: name,
+                                url: `https://www.pokebip.com/pokedex-images/300/${id}.png?v=ev-blueberry`
+                            });
+                            current = current.evolves_to[0];
+                        }
+                        setEvolutionChain(evolutionChain);
+                    });
+            });
+    }, [pokemonData]);
 
     const options = {
-    title: {
-        text: "Stats chart",
-        fontColor: "white",
-    },
+        title: {
+            text: "Stats chart",
+            fontColor: "white",
+        },
         backgroundColor: "transparent",
-    axisX: {
-        labelFontColor: "white",
-        lineColor: "white",
-        tickColor: "white"
-    },
-    axisY: {
-        labelFontColor: "white",
-        lineColor: "white",
-        tickColor: "white"
-    },
-    colorSet: "customColorSet",
-    data: [
-        {
-            type: "column",
-            dataPoints: [
-                { label: "HP", y: pokemonData?.stats[0].base_stat},
-                { label: "Attack", y: pokemonData?.stats[1].base_stat},
-                { label: "Defense", y: pokemonData?.stats[2].base_stat},
-                { label: "Special Attack", y: pokemonData?.stats[3].base_stat},
-                { label: "Special Defense", y: pokemonData?.stats[4].base_stat},
-                { label: "Speed", y: pokemonData?.stats[5].base_stat}
-            ]
-        }
-    ]
-};
+        axisX: {
+            labelFontColor: "white",
+            lineColor: "white",
+            tickColor: "white"
+        },
+        axisY: {
+            labelFontColor: "white",
+            lineColor: "white",
+            tickColor: "white"
+        },
+        colorSet: "customColorSet",
+        data: [
+            {
+                type: "column",
+                dataPoints: [
+                    {label: "HP", y: pokemonData?.stats[0].base_stat},
+                    {label: "Attack", y: pokemonData?.stats[1].base_stat},
+                    {label: "Defense", y: pokemonData?.stats[2].base_stat},
+                    {label: "Special Attack", y: pokemonData?.stats[3].base_stat},
+                    {label: "Special Defense", y: pokemonData?.stats[4].base_stat},
+                    {label: "Speed", y: pokemonData?.stats[5].base_stat}
+                ]
+            }
+        ]
+    };
     CanvasJS.addColorSet("customColorSet", [
         "#FF5733", // Color for HP
         "#33FF57", // Color for Attack
@@ -114,6 +136,7 @@ export default function Pokemon() {
         "#A133FF", // Color for Special Defense
         "#33FFF5"  // Color for Speed
     ]);
+
     return (
         <>
             <section className={'pokemon_container'}>
@@ -188,6 +211,21 @@ export default function Pokemon() {
                 </div>
                 <div className={'pokemon_container_chart'}>
                     <CanvasJSChart options={options}/>
+                </div>
+            </section>
+
+            <section className={'pokemon_container'}>
+                <div className={'evolution_line'}>
+                    <h2>Evolution Line</h2>
+                    <div className={'evolution_line_container'}>
+                        {evolutionChain.map((evolution) => (
+                            <div className={'evolution_line_container_item'} key={evolution.species}>
+                                <img src={evolution.url} alt={`image representing ${evolution.species}`}
+                                     className={'evolution_line_container_item_image'}/>
+                                <p className={'evolution_line_container_item_name'}>{evolution.species}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
         </>

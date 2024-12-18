@@ -1,7 +1,7 @@
 @use "../variables.scss" as *;
 
 .list_container {
-  @media screen and (max-width: 550px) {
+  @media screen and (max-width: 600px) {
     display: flex;
     flex-direction: row;
     width: fit-content;
@@ -16,17 +16,24 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
-  padding: 20px;
+  //padding: 20px;
   border-radius: 10px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 0;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1050px) {
+    margin: 0 5%;
+  }
+
+  @media screen and (max-width: 830px) {
     flex-direction: column;
     align-items: center;
     gap: 1rem
   };
 
   &_card {
-    margin: 0 10px;
+    margin: 0 10px 0 0;
     min-width: 200px;
     width: 220px;
     display: flex;
@@ -53,15 +60,22 @@
   }
 
   &_information {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: baseline;
     padding: 20px;
     background: $background-color-secondary;
     border-radius: 10px;
 
+    @media screen and (max-width: 930px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem
+    }
+
     &_description {
-      font-size: 1.3rem;
       margin-bottom: 20px;
-
-
       @media screen and (max-width: 550px) {
         font-size: 1rem;
         width: 100%;
@@ -109,16 +123,15 @@
       }
 
       &_list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        display: inline-grid;
+        grid-template-columns: repeat(4, 1fr);
 
         &-container {
-            display: flex;
+          display: flex;
           flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
         }
 
         @media screen and (max-width: 550px) {
@@ -147,6 +160,11 @@
         grid-template-columns: repeat(2, 1fr);
         grid-gap: 10px;
 
+        @media screen and (max-width: 400px) {
+          grid-template-columns: repeat(1, 1fr);
+
+        }
+
         &_item {
           padding: 10px;
           border: 1px solid $background-color-secondary;
@@ -171,6 +189,11 @@
         display: inline-grid;
         grid-template-columns: repeat(6, 1fr);
 
+
+        @media screen and (max-width: 600px) {
+          grid-template-columns: repeat(4, 1fr);
+
+        }
 
         @media screen and (max-width: 550px) {
           display: flex;
@@ -200,7 +223,7 @@
     width: 40%;
 
     @media screen and (max-width: 550px) {
-     width: 75%;
+      width: 75%;
     }
   }
 }
@@ -213,13 +236,13 @@
   background-color: $background-color-secondary;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 
-  @media screen and (max-width: 1250px) {
-    margin: 0 2%;
+  @media screen and (max-width: 1050px) {
+    margin: 0 5%;
   }
 
   @media screen and (max-width: 768px) {
@@ -243,6 +266,72 @@
     .pokemon_container_stats {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+.pokemon_container_chart {
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.evolution_line {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: $background-color-secondary;
+  flex-direction: column;
+  align-items: center;
+
+  &_container {
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 20px;
+    border-radius: 10px;
+    flex-direction: row;
+
+    max-width: 1000px;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+
+
+    &_item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 1rem;
+
+      &:not(:last-child) {
+        &::after {
+          content: "→";
+          font-size: 2rem;
+          position: relative;
+          left: 50%;
+          bottom: 50%;
+
+          @media screen and (max-width: 768px) {
+            left: 0;
+            bottom: 0;
+            transform: rotate(90deg);
+          }
+        }
+      }
+
+      &_image {
+        width: 70%;
+        padding: 5px;
+        background: $background-color-secondary;
+      }
+
+      &_name {
+        font-weight: bold;
+      }
     }
   }
 }
