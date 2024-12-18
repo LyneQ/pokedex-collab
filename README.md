@@ -100,6 +100,7 @@ You will create a comprehensive Pokedex application using the [PokeAPI](https://
 
 ### Resources
 
-- reactTS and vite
-- react-rooter
-- SASS (.scss)
+- reactTS and vite _(did I have to explain this ?)_
+- react-rooter _(npm package for routing)_
+- @canvasjs/react-charts _(npm package for charts building)_
+- SASS _(css framework for styling)_

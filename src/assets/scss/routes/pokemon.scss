@@ -1,0 +1,248 @@
+@use "../variables.scss" as *;
+
+.list_container {
+  @media screen and (max-width: 550px) {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: self-start;
+    margin: 0 auto;
+  }
+}
+
+.pokemon_container {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem
+  };
+
+  &_card {
+    margin: 0 10px;
+    min-width: 200px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease-in-out;
+    background: $background-color-secondary;
+
+    .pokemon_name {
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .pokemon_image {
+      width: 120px;
+      height: 120px;
+      padding: 5px;
+      background: $background-color-secondary;
+    }
+  }
+
+  &_information {
+    padding: 20px;
+    background: $background-color-secondary;
+    border-radius: 10px;
+
+    &_description {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+
+
+      @media screen and (max-width: 550px) {
+        font-size: 1rem;
+        width: 100%;
+      }
+    }
+
+    &_list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      @media screen and (max-width: 550px) {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 auto;
+      }
+
+      &_item {
+        margin: 5px;
+        padding: 10px;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: $background-color;
+        }
+      }
+    }
+
+    &_ability {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+
+      &_title {
+        font-size: 20px;
+        font-weight: bold;
+        color: $color-primary;
+      }
+
+      &_list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        &-container {
+            display: flex;
+          flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width: 550px) {
+          display: flex;
+          flex-direction: column;
+          width: fit-content;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        &_item {
+          margin: 5px;
+          padding: 10px;
+          border: 1px solid $border-color;
+          border-radius: $border-radius;
+          transition: background 0.3s ease;
+
+          &:hover {
+            background: $background-color;
+          }
+        }
+      }
+
+      &_list_type {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 10px;
+
+        &_item {
+          padding: 10px;
+          border: 1px solid $background-color-secondary;
+          border-radius: $border-radius;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: background 0.3s ease;
+
+          &:hover {
+            background: $background-color;
+          }
+        }
+      }
+    }
+
+    &_stats {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &_list {
+        display: inline-grid;
+        grid-template-columns: repeat(6, 1fr);
+
+
+        @media screen and (max-width: 550px) {
+          display: flex;
+          flex-direction: column;
+          width: fit-content;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        &_item {
+          margin: 5px;
+          padding: 10px;
+          border: 1px solid $border-color;
+          border-radius: $border-radius;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: background 0.3s ease;
+
+          &:hover {
+            background: $background-color;
+          }
+        }
+      }
+    }
+  }
+
+  &_chart {
+    width: 40%;
+
+    @media screen and (max-width: 550px) {
+     width: 75%;
+    }
+  }
+}
+
+.pokemon_container_types {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: $background-color-secondary;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1250px) {
+    margin: 0 2%;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .pokemon_container_title, .stat_list {
+    border-radius: $border-radius;
+    padding: 10px;
+    height: 30vh;
+    text-align: center;
+  }
+
+  .stat_list {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+
+    .pokemon_container_stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

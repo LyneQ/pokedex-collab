@@ -7,6 +7,28 @@ html {
 
 body {
   font-family: $font-family;
-  background-color: $background-color;
+  //background-color: $background-color;
+  background: url("https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png");
   color: $font-color;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+h6 {
+  font-size: 0.8rem;
+  font-weight: bold;
 }
