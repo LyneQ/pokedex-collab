@@ -1,18 +1,19 @@
 import {useParams} from 'react-router';
-import {useEffect, useState} from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import CanvasJSReact from '@canvasjs/react-charts';
+import {SetStateAction, useEffect, useRef, useState} from 'react';
+import {useNavigate} from 'react-router';
+
 import type {PokemonData, evolutionChain} from '../types/interfaces';
 import '../assets/scss/routes/Pokemon.scss';
 import PokemonType from "../components/PokemonType.tsx";
 import AudioPlayer from "../components/AudioPlayer.tsx";
+import PokemonStatsChart from "../assets/scss/components/PokemonStatsChart.tsx";
 
 
-const CanvasJS = CanvasJSReact.CanvasJS;
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 
 export default function Pokemon() {
+
+    const navigate = useNavigate();
     const params = useParams();
     const [pokemonData, setPokemonData] = useState<PokemonData | null>(null);
     const [pokemonSpecies, setPokemonSpecies] = useState<PokemonData | null>(null);
@@ -81,70 +82,48 @@ export default function Pokemon() {
                 fetch(data.evolution_chain.url)
                     .then((response) => response.json())
                     .then(async (data) => {
-                        const evolutionChain = [];
-                        let current = data.chain;
-                        while (current) {
-                            const name = current.species.name;
-                            const id = await getPokemonIdFromName(name);
+                        const evolutionChain: SetStateAction<evolutionChain[]> = [];
+                        const getEvolutionChain = async (evolution, previousEvolution = null) => {
+                            const id = await getPokemonIdFromName(evolution.species.name);
+
                             evolutionChain.push({
-                                species: name,
-                                url: `https://www.pokebip.com/pokedex-images/300/${id}.png?v=ev-blueberry`
+                                species: evolution.species.name,
+                                previousEvolution: evolutionChain.length > 0 ? previousEvolution : null,
+                                url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+                                onClickUrl: `/pokemon/${id}`
                             });
-                            current = current.evolves_to[0];
-                        }
+                            for (const evo of evolution.evolves_to) {
+                                await getEvolutionChain(evo, evolution.species.name);
+                            }
+                        };
+                        await getEvolutionChain(data.chain);
                         setEvolutionChain(evolutionChain);
                     });
             });
     }, [pokemonData]);
 
-    const options = {
-        title: {
-            text: "Stats chart",
-            fontColor: "white",
-        },
-        backgroundColor: "transparent",
-        axisX: {
-            labelFontColor: "white",
-            lineColor: "white",
-            tickColor: "white"
-        },
-        axisY: {
-            labelFontColor: "white",
-            lineColor: "white",
-            tickColor: "white"
-        },
-        colorSet: "customColorSet",
-        data: [
-            {
-                type: "column",
-                dataPoints: [
-                    {label: "HP", y: pokemonData?.stats[0].base_stat},
-                    {label: "Attack", y: pokemonData?.stats[1].base_stat},
-                    {label: "Defense", y: pokemonData?.stats[2].base_stat},
-                    {label: "Special Attack", y: pokemonData?.stats[3].base_stat},
-                    {label: "Special Defense", y: pokemonData?.stats[4].base_stat},
-                    {label: "Speed", y: pokemonData?.stats[5].base_stat}
-                ]
-            }
-        ]
-    };
-    CanvasJS.addColorSet("customColorSet", [
-        "#FF5733", // Color for HP
-        "#33FF57", // Color for Attack
-        "#3357FF", // Color for Defense
-        "#FF33A1", // Color for Special Attack
-        "#A133FF", // Color for Special Defense
-        "#33FFF5"  // Color for Speed
-    ]);
+
+
+    const toggleShiny = (e: any) => {
+        e.target.src.includes('shiny') ?
+            e.target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${params.id}.png` :
+            e.target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${params.id}.png`;
+    }
+
+    console.log(evolutionChain)
+
+    const pokemonId = pokemonData?.id;
 
     return (
         <>
             <section className={'pokemon_container'}>
                 <div className={'pokemon_container_card'}>
                     <h1 className={'pokemon_name'}>{pokemonData?.name}</h1>
-                    <img src={`https://www.pokebip.com/pokedex-images/300/${params.id}.png?v=ev-blueberry\``}
-                         className={'pokemon_image'}
-                         alt={`image representing ${pokemonData?.name}`}/>
+                    <img
+                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${ pokemonId }.png`}
+                        className={'pokemon_image'}
+                        onClick={toggleShiny}
+                        alt={'test'}/>
                     <AudioPlayer audioLink={`https://pokemoncries.com/cries-old/${params.id}.mp3`}/>
                 </div>
                 <div className={'pokemon_container_information'}>
@@ -192,7 +171,6 @@ export default function Pokemon() {
                     </div>
                 </div>
             </section>
-
             <section className={'pokemon_container pokemon_container_types'}>
                 <div className={'pokemon_container_title'}>
                     <h2>Types</h2>
@@ -201,7 +179,6 @@ export default function Pokemon() {
                             <PokemonType type={type.type.name} key={type.type.name}/>
                         ))}
                     </div>
-
                     <h2>weakness</h2>
                     <div className={'pokemon_container_information_ability_list_type'}>
                         {pokemonWeakness.map((type) => (
@@ -210,24 +187,37 @@ export default function Pokemon() {
                     </div>
                 </div>
                 <div className={'pokemon_container_chart'}>
-                    <CanvasJSChart options={options}/>
+                    <PokemonStatsChart pokemonData={pokemonData}/>
+
                 </div>
             </section>
-
             <section className={'pokemon_container'}>
                 <div className={'evolution_line'}>
                     <h2>Evolution Line</h2>
                     <div className={'evolution_line_container'}>
-                        {evolutionChain.map((evolution) => (
-                            <div className={'evolution_line_container_item'} key={evolution.species}>
-                                <img src={evolution.url} alt={`image representing ${evolution.species}`}
-                                     className={'evolution_line_container_item_image'}/>
-                                <p className={'evolution_line_container_item_name'}>{evolution.species}</p>
-                            </div>
-                        ))}
+
+                        <ul>
+                            <li className={'first_evolution'}>First Evolution</li>
+                            <li className={'second_evolution'}>Second Evolution</li>
+                            <li className={'third_evolution'}>Third Evolution</li>
+                        </ul>
+                        {
+                            evolutionChain.map((evolution) => (
+                                <div
+                                    className={`evolution_line_container_item ${evolution.previousEvolution ? `previous_to-${evolution.previousEvolution}` : ''}`}
+                                    key={evolution.species}>
+                                    <img src={evolution.url} alt={evolution.species}
+                                         onClick={() => navigate(evolution.onClickUrl)}
+                                         className={'evolution_line_container_item_image'}/>
+                                    <p className={'evolution_line_container_item_name'}>{evolution.species}</p>
+                                </div>
+                            ))
+                        }
+
                     </div>
                 </div>
             </section>
+
         </>
     );
 }

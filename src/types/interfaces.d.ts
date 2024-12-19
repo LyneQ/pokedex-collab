@@ -2,6 +2,7 @@ interface PokemonData {
     name: string;
     sprites: {
         front_default: string;
+        front_shiny: string;
     },
     abilities: {
         ability: {
@@ -39,7 +40,7 @@ interface PokemonData {
         double_damage_from: {
             name: string;
         }[]
-    }
+    };
 }
 
 export interface EvolutionChain {
