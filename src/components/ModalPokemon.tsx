@@ -7,7 +7,11 @@ interface Pokemon {
 }
 
 export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModal: () => void}) {
-    const [pokemon, setPokemon] = useState<{ name?: string, stats?: object[{}], types?: object[{}], id?: number}>({})
+    const [pokemon, setPokemon] = useState<{ name?: string, stats?: object[{}], 
+    types?: object[{}], id?: number}>({})
+    const [versionPkemon, setVersionPokemon] = useState<Array<{type: string, img: string}>>([])
+    const [versionIndex, setVersionIndex] = useState<number>(0)
+   
     const  urlpokemon = url.url
     useEffect(() => {
         fetch(urlpokemon)
@@ -19,28 +23,49 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
                 types: data.types,
                 id: data.id
             });
+            setVersionPokemon([
+                {
+                    type: 'normal',
+                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png`
+                },
+                {
+                    type: 'shiny',
+                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${data.id}.png`
+                }
+            ])
             console.log(data)
         })
         .catch(error => {
             console.error('Error fetching the Pokémon data:', error);
         });
     }, [url])
-    useEffect(() => {
-    }, [pokemon]);
+    
+    function toggleimage(index: number) {
+        setVersionIndex((prevIndex) => (prevIndex + index + versionPkemon.length) % versionPkemon.length)
+    }
+
+    const currentVersion = versionPkemon[versionIndex];
+
     return (
         <div  onClick={closeModal} className='modalPokemon'>
             <div onClick={(e) => e.stopPropagation()}
-             className="pokemonCenter">
+             className="pokemonCenter pokemon-front">
                 <SvgComponent types={pokemon.types}/>
                 <div className="hp">
                     <p className='nameHp'>HP : </p>
                     <p className='valueHp'>{pokemon.stats?.[0]?.base_stat}</p>
                 </div>
-                <div className="pokemonCenterCard">
-                    
-                    <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`} alt={pokemon.name} />
+                <div onClick = {() => toggleimage(1)} 
+                 className="pokemonCenterCard">
+                    {currentVersion && (
+                        <>
+                            <p className='name'><span>{currentVersion.type}</span> </p>
+                            <img src={currentVersion.img} alt={pokemon.name} />
+                        </>
+                    )}
                     <h3>{pokemon.name}</h3>
                     <PokemonType type={pokemon.types} />
+                    
                 </div>
                 <div className="stats">
                     <div className="attack">

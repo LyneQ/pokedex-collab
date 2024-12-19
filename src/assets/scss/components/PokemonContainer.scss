@@ -53,7 +53,7 @@
             background-color: white;
             box-shadow: 0 4px 6px rgba(7, 7, 7, 0.9);
             max-height: 250px;
-            overflow-y: auto;
+            overflow-y: hidden;
             z-index: 1000;
           }
           
@@ -213,6 +213,34 @@
             border-radius: $border-radius;
             padding: 1rem;
             margin-bottom: 1rem;
+            .name{
+                font-size: 1rem;
+                font-weight: bold;
+                margin-top: 10px;
+                span{
+                    font-size: 1.3rem;
+                    font-weight: bolder;
+                    opacity: 0.5;
+                }
+            }
+            .navigation-version{
+                display: flex;
+                border-radius: $border-radius;
+                .navigation-button{
+                    margin: 0 auto;
+                    cursor: pointer;
+                    .arrow{
+                        width: 10px;
+                        height: 10px;
+                        background-color: $font-color;
+                        border-radius: 50%;
+                        margin: 5px;
+                    }
+                    .arrow.active{
+                        background-color: $color-primary;
+                    }
+                }
+            }
             .pokemonType {
                 display: flex;
                 justify-content: center;
