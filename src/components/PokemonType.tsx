@@ -24,6 +24,8 @@ export default function PokemonType({type}: {type: {type: {name: string}}[]}) {
         { type: 'water', hex: "#6890F0" }
     ];
 
+    
+    if (!type) return null;
     return (
         <div className="pokemonType">
             {type.map((t: any, index: number) => {

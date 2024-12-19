@@ -1,83 +1,264 @@
 @use '../variables.scss' as *;
 
+.containerPokedex {
 
-.containerPokedex{
-    .search{
+    max-width: 1300px;
+    margin: 0 auto;
+    .head{
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        h1 {
+            font-size: 2rem;
+            color: $font-color;
+        }
+    }
+    .search {
+        position: relative;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         margin-top: 20px;
         margin-bottom: 20px;
-        .searchPokemon{
-            padding: 1.5rem 5rem;
-            border-radius: calc(#{$border-radius} * 2);
-            margin: 2rem;
-            border: 1px solid $font-color;
-            
+        .searchPokemon {
+            padding: 0.8rem 5rem;
+            margin: 1.2rem;
+            border: none;
+            border-bottom: 1px solid $font-color;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-bottom 0.3s ease;
+            &::placeholder {
+                color: $font-color;
+                opacity: 0.5; /* Ajustez l'opacité selon vos besoins */
+            }
+            &:focus {
+                border-bottom: 10px solid $font-color;
+                outline: none;
+              }
         }
-        .searchButton{
-
+        .suggestions {
+            position: absolute;
+            top: 60%;
+            left: 0;
+            right: 0;
+            margin: 30px 50px  ;
+            opacity: 0.5;
+            padding: 0;
+            list-style: none;
+            max-width: 350px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(7, 7, 7, 0.9);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 1000;
+          }
+          
+          .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 1px solid #4a3e3e;
+            color: #333;
+            &:hover {
+              background-color: #ea0f0f;
+            }
+          }
+          
+          
+          
+        .searchButton {
             border: 1px solid $font-color;
-            border-radius: $border-radius;
+            border-radius: calc(#{$border-radius} *8);
             background-color: $color-primary;
             color: $font-color;
-            padding: 0.5rem 2rem;
+            padding: 0.1rem 2rem;
             cursor: pointer;
             margin-left: 10px;
-            img{
-                width: 50px;
-                height: 50px;
-
+            img {
+                width: 30px;
+                height: 30px;
             }
         }
     }
+
     
-    .pokedexGrid{
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-        gap: 20px;
-        padding: 20px;
-        justify-content: center;
-        align-items: center;
-        .pokemonCart{
+
+    .showMore {
+        width: 200px;
+        text-align: center;
+        margin: 20px auto;
+        background-color: $color-primary;
+        padding: 0.5rem 2rem;
+        border-radius: $border-radius;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: $font-color;
+    }
+    .pokemonContainer {
+        display: flex;
+        flex-direction: column;
+        .pokedexGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+           
+        }
+        .pokemonCart {
+            position: relative;
             background-color: $background-color-secondary;
             border-radius: $border-radius;
             padding: 1rem;
-            display: flex;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex ;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            img{
+            &:hover {
+                transform: translateY(-10px);
+            }
+            img {
                 width: 200px;
                 height: 200px;
             }
-            h3{
+            h3 {
                 font-size: 1.5rem;
                 font-weight: bold;
                 margin-top: 10px;
             }
-            .pokemonType{
+            .pokemonType {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 margin-top: 10px;
-                .type{
+                
+                .type {
                     padding: 0.5rem;
                     margin: 0.5rem;
                     border-radius: $border-radius;
-                    @include get-type-color('fire');
+                    width: 100px;
+                    text-align: center;
+                    font-size: 1.2rem;
                 }
             }
-            .pokemonId{
+            .pokemonId {
+                margin-top: 10px;
+            }
+            
+        }
+        
+    }
+   
+}
+
+.modalPokemon {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    .pokemonCenter {
+        position: relative;
+        min-width: 500px;
+        height: fit-content;
+        background-color: $background-color-secondary;
+        border-radius: $border-radius;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        svg{
+           width: 100%;
+        }
+        .hp{
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            margin: 20px;
+            .nameHp{
+                font-size: 1rem;
+                font-weight: bold;
+            }
+            .valueHp{
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+            p{
+                margin-right: 10px;
+            }
+        }
+        .pokemonCenterCard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: $border-radius;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            .pokemonType {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 10px;
+                
+                .type {
+                    padding: 0.5rem;
+                    margin: 0.5rem;
+                    border-radius: $border-radius;
+                    width: 100px;
+                    text-align: center;
+                    font-size: 1.2rem;
+                }
+            }
+            img {
+                width: 200px;
+                height: 200px;
+                
+            }
+            h3 {
+                font-size: 1.5rem;
+                font-weight: bold;
                 margin-top: 10px;
             }
         }
-    }
-    .pokemonContainer{
-        display: flex;
-       
-        flex-direction: column;
-        .showMore{
+        .stats {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            margin: 20px;
+            p{
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+            h4{
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: $font-color;
+                opacity: 0.5; 
+            }
+            
+        }
+        .FichePokemon{
             width: 200px;
             text-align: center;
             margin: 20px auto;
@@ -89,5 +270,4 @@
             color: $font-color;
         }
     }
-    
 }
