@@ -1,105 +1,51 @@
-# PokeAPI Collaborative Project
+# PokedexCollab
+This is a collaborative project to create a Pokedex using React and the PokeAPI.
 
-| Challenge Parameters       | Challenge Details |
-| :------------------------- | :---------------- |
-| Create a public repository | `pokedex-collab`  |
-| Challenge type             | Collaborative     |
-| Duration                   | 5 days            |
-| Team                       | 2                 |
+## Overview
+The Pokedex will consist of two main views: a list view and a detail view. The list view will display a list of all Pokemon, while the detail view will display detailed information about a specific Pokemon.
 
-### Deployment Options
+## Features
+- Fetch and display Pokemon data from PokeAPI
+- Create a comprehensive list view of all Pokemons
+- Implement detailed view for individual Pokemon
+- Add search and filtering capabilities
 
--   Netlify
--   Vercel
--   GitHub Pages
--   Render
--   Railway
+## Installation
 
-## Learning Objectives
+1. Clone the repository
+```
+git clone https://github.com/LyneQ/todo-app-react.git
+cd todo-app-react
+```
+2. Run `npm install` to install dependencies
+```
+npm install
+```
+3. Run `npm run dev` to start the development server
+```
+npm run dev
+```
+4. Open `http://localhost:5173` in your browser
 
--   Develop a React application consuming a public API
--   Practice modern React development techniques
--   Create a responsive and interactive web application
--   Learn state management and component composition
+## Usage
+- Click on a Pokemon in the list view to view detailed information about that Pokemon
+- Use the search bar to search for a specific Pokemon
+- Enjoy exploring the Pokedex!
 
-## The Mission
+## Technologies Used
 
-Welcome to your collaborative React project!
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A strongly typed programming language that builds on JavaScript.
+- **Vite**: A build tool that provides fast development and production build processes.
 
-You will create a comprehensive Pokedex application using the [PokeAPI](https://pokeapi.co/). This project will challenge you to work together, design an intuitive interface, and demonstrate your React skills.
+## Contributing
 
-### Project Requirements
+Contributions are welcome! If you would like to contribute to TodoBite, please fork the repository and submit a pull request.
 
-#### Core Functionality
+## License
 
--   Fetch and display Pokemon data from PokeAPI
--   Create a comprehensive list view of all Pokemons
--   Implement detailed view for individual Pokemon
--   Add search and filtering capabilities
--   Pages for favorites pokemons (stored in localstorage)
+This project is licensed under the MIT License.
 
-#### Technical Specifications
-
-##### Frontend
-
--   React.js (latest stable version)
--   "React Router" or "Tanstack Router" for navigation
--   React Context API for state management
-
-##### API Interaction
-
--   Use Axios or Fetch for API calls
--   **Implement proper error handling**
--   **Add loading states**
--   Implement pagination or infinite scroll
-
-### What to Investigate and Implement
-
--   Advanced React Hooks (useState, useEffect, useContext, useReducer)
--   Responsive design principles
--   Performance optimization techniques
--   Comprehensive and re-usable error handling
--   Accessibility considerations
--   Meaningful git workflow (feature branches, pull requests)
-
-### Development Workflow
-
-1. **Project Setup**
-
-    - Create a repo
-    - Set up development environment
-    - Configure **ESLint and Prettier** (you don't know what ESLint is it's time to check it out)
-
-2. **Collaborative Development**
-    - Use pair programming techniques
-    - Create a kanban, share tasks and responsibilities
-    - Regular sync-up every morning or evening
-
-### Bonus Challenges & Features
-
--   Add complex filtering and sorting
--   Create a team builder functionality
--   Add Pokemon comparison tool
--   Create data visualizations of Pokemon stats
--   Implement user authentication
--   Implement unit and integration tests(Jest or React Testing Library)
-
-### Submission Requirements
-
-1. GitHub Repository
-    - Clean, organized code
-    - Comprehensive README
-    - Deployment link
-2. Presentation deck
-    - Project overview
-    - Technical challenges
-    - Lessons learned
-3. Live demo of the application
-
-
-
-### Resources
-
-- reactTS and vite
-- react-rooter
-- SASS (.scss)
+# Team Members
+- [LyneQ](https://github.com/LyneQ)
+- [josias mbogle](https://github.com/junior344)
