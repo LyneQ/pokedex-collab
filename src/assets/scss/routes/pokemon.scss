@@ -49,6 +49,9 @@
       font-size: 22px;
       font-weight: bold;
       margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .pokemon_image {
@@ -285,12 +288,18 @@
   flex-direction: column;
   align-items: center;
 
+  &-arrow {
+     font-size: 2rem;
+    margin: 0 5px;
+  }
+
   &_container {
     display: flex;
     flex-wrap: nowrap;
     padding: 20px;
     border-radius: 10px;
     flex-direction: row;
+    align-items: center;
 
     max-width: 1000px;
     margin: 0 auto;
@@ -298,39 +307,20 @@
     @media screen and (max-width: 768px) {
       flex-direction: column;
     }
-
-
     &_item {
       display: flex;
       flex-direction: column;
-      align-items: center;
-
       gap: 1rem;
 
-      &:not(:last-child) {
-        &::after {
-          content: "→";
-          font-size: 2rem;
-          position: relative;
-          left: 50%;
-          bottom: 50%;
-
-          @media screen and (max-width: 768px) {
-            left: 0;
-            bottom: 0;
-            transform: rotate(90deg);
-          }
-        }
-      }
-
       &_image {
-        width: 70%;
+        width: 100%;
         padding: 5px;
-        background: $background-color-secondary;
       }
 
       &_name {
         font-weight: bold;
+        width: fit-content;
+        margin: 0 auto;
       }
     }
   }

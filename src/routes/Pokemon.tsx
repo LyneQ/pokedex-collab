@@ -1,14 +1,11 @@
-import {useParams} from 'react-router';
+import {Link, useParams, useNavigate} from 'react-router';
 import {SetStateAction, useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router';
-
 import type {PokemonData, evolutionChain} from '../types/interfaces';
 import '../assets/scss/routes/Pokemon.scss';
 import PokemonType from "../components/PokemonType.tsx";
 import AudioPlayer from "../components/AudioPlayer.tsx";
 import PokemonStatsChart from "../assets/scss/components/PokemonStatsChart.tsx";
-
-
+import {JSX} from 'react/jsx-runtime';
 
 
 export default function Pokemon() {
@@ -19,6 +16,10 @@ export default function Pokemon() {
     const [pokemonSpecies, setPokemonSpecies] = useState<PokemonData | null>(null);
     const [pokemonWeakness, setPokemonWeakness] = useState<string[]>([]);
     const [evolutionChain, setEvolutionChain] = useState<evolutionChain[]>([]);
+    const [firstEvolution, setFirstEvolution] = useState([]);
+    const [secondEvolution, setSecondEvolution] = useState([]);
+    const [thirdEvolution, setThirdEvolution] = useState([]);
+
 
     const getPokemonIdFromName = async (name: string) => {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
@@ -38,7 +39,7 @@ export default function Pokemon() {
         };
 
         fetchData();
-    }, [params.id]);
+    }, []);
     useEffect(() => {
         const getWeakness = async () => {
             const request = async (url: RequestInfo | URL) => {
@@ -74,7 +75,7 @@ export default function Pokemon() {
         };
 
         getWeakness();
-    }, [params.id]);
+    }, []);
     useEffect(() => {
         fetch(`https://pokeapi.co/api/v2/pokemon-species/${params.id}`)
             .then((response) => response.json())
@@ -83,25 +84,58 @@ export default function Pokemon() {
                     .then((response) => response.json())
                     .then(async (data) => {
                         const evolutionChain: SetStateAction<evolutionChain[]> = [];
-                        const getEvolutionChain = async (evolution, previousEvolution = null) => {
+                        const getEvolutionChain = async (evolution: {
+                            species: { name: string; };
+                            evolves_to: never;
+                        }) => {
                             const id = await getPokemonIdFromName(evolution.species.name);
+                            const previousEvolution = await fetch('https://pokeapi.co/api/v2/pokemon-species/' + id)
+                                .then(response => response.json())
+                                .then(data => data.evolves_from_species);
 
                             evolutionChain.push({
                                 species: evolution.species.name,
-                                previousEvolution: evolutionChain.length > 0 ? previousEvolution : null,
+                                previousEvolution: evolutionChain.length > 0 ? previousEvolution.name : null,
                                 url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
                                 onClickUrl: `/pokemon/${id}`
                             });
-                            for (const evo of evolution.evolves_to) {
-                                await getEvolutionChain(evo, evolution.species.name);
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-expect-error
+                            for await (const evo of evolution.evolves_to) {
+                                await getEvolutionChain(evo);
                             }
                         };
                         await getEvolutionChain(data.chain);
                         setEvolutionChain(evolutionChain);
                     });
             });
-    }, [pokemonData]);
+    }, []);
+    useEffect(() => {
+        const firstEvolution: ((prevState: never[]) => never[]) | JSX.Element[] = [];
+        const secondEvolution: ((prevState: never[]) => never[]) | JSX.Element[] = [];
+        const thirdEvolution: ((prevState: never[]) => never[]) | JSX.Element[] = [];
 
+        evolutionChain.forEach((evolution) => {
+            const evolutionElement = (
+                <li key={evolution.species}>
+                    <p className={'evolution_line_container_item_name'}>{evolution.species}</p>
+                    <img src={evolution.url} className="evolution_line_container_item_image" alt={evolution.species}/>
+                </li>
+            );
+
+            if (evolution.previousEvolution === null) {
+                firstEvolution.push(evolutionElement);
+            } else if (evolution.previousEvolution === evolutionChain[0].species) {
+                secondEvolution.push(evolutionElement);
+            } else {
+                thirdEvolution.push(evolutionElement);
+            }
+        });
+
+        setFirstEvolution(firstEvolution);
+        setSecondEvolution(secondEvolution);
+        setThirdEvolution(thirdEvolution);
+    }, [evolutionChain]);
 
 
     const toggleShiny = (e: any) => {
@@ -118,18 +152,20 @@ export default function Pokemon() {
         <>
             <section className={'pokemon_container'}>
                 <div className={'pokemon_container_card'}>
-                    <h1 className={'pokemon_name'}>{pokemonData?.name}</h1>
+                    <h1 className={'pokemon_name'}>{pokemonData?.name} <h6>N°{params.id}</h6></h1>
                     <img
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${ pokemonId }.png`}
+                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`}
                         className={'pokemon_image'}
                         onClick={toggleShiny}
                         alt={'test'}/>
                     <AudioPlayer audioLink={`https://pokemoncries.com/cries-old/${params.id}.mp3`}/>
                 </div>
                 <div className={'pokemon_container_information'}>
+                    <div>
                     <p className={'pokemon_container_information_description'}>
                         {pokemonSpecies?.flavor_text_entries.find(entry => entry.language.name === 'en')?.flavor_text.replace('\f', '')}
                     </p>
+                    </div>
                     <div className={'list_container'}>
                         <div className={'pokemon_container_information_ability_list-container'}>
                             <h2>details</h2>
@@ -196,24 +232,29 @@ export default function Pokemon() {
                     <h2>Evolution Line</h2>
                     <div className={'evolution_line_container'}>
 
-                        <ul>
-                            <li className={'first_evolution'}>First Evolution</li>
-                            <li className={'second_evolution'}>Second Evolution</li>
-                            <li className={'third_evolution'}>Third Evolution</li>
-                        </ul>
-                        {
-                            evolutionChain.map((evolution) => (
-                                <div
-                                    className={`evolution_line_container_item ${evolution.previousEvolution ? `previous_to-${evolution.previousEvolution}` : ''}`}
-                                    key={evolution.species}>
-                                    <img src={evolution.url} alt={evolution.species}
-                                         onClick={() => navigate(evolution.onClickUrl)}
-                                         className={'evolution_line_container_item_image'}/>
-                                    <p className={'evolution_line_container_item_name'}>{evolution.species}</p>
-                                </div>
-                            ))
-                        }
+                        <ul className={'first_evolution evolution_line_container_item'}>{firstEvolution.map((item) => (
+                            <>
+                                {item}
+                            </>
+                        ))
+                        }</ul>
+                        { secondEvolution.length > 0 && <p className={'evolution_line-arrow'}>→</p> }
 
+                        <ul className={'second_evolution evolution_line_container_item'}>{
+                            secondEvolution.map((item) => (
+                                <>
+                                    {item}
+                                </>
+                            ))
+                        }</ul>
+                        { thirdEvolution.length > 0 && <p className={'evolution_line-arrow'}>→</p> }
+                        <ul className={'third_evolution evolution_line_container_item'}>{
+                            thirdEvolution.map((item) => (
+                                <>
+                                    {item}
+                                </>
+                            ))
+                        }</ul>
                     </div>
                 </div>
             </section>
