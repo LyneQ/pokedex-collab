@@ -47,5 +47,5 @@ Contributions are welcome! If you would like to contribute to TodoBite, please f
 This project is licensed under the MIT License.
 
 # Team Members
-- [LyneQ](https://github.com/LyneQ)
-- [josias mbogle](https://github.com/junior344)
+- [Lyne Quequin](https://github.com/LyneQ)
+- [Josias Mbogle](https://github.com/junior344)
