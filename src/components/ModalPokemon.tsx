@@ -7,6 +7,7 @@ interface Pokemon {
 }
 
 export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModal: () => void}) {
+
     const [pokemon, setPokemon] = useState<{ name?: string, stats?: object[{}], 
     types?: object[{}], id?: number}>({})
     const [versionPkemon, setVersionPokemon] = useState<Array<{type: string, img: string}>>([])
@@ -14,7 +15,7 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
    
     const  urlpokemon = url.url
     useEffect(() => {
-        fetch(urlpokemon)
+        fetch(url)
         .then(response => response.json())
         .then(data => {
             setPokemon({
@@ -23,6 +24,7 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
                 types: data.types,
                 id: data.id
             });
+            console.log("data-8-pokemon",pokemon)
             setVersionPokemon([
                 {
                     type: 'normal',
