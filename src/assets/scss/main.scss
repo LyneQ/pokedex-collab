@@ -8,7 +8,8 @@ html {
 body {
   font-family: $font-family;
   //background-color: $background-color;
-  background: url("https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png");
+  background: linear-gradient(135deg, $background-color, $background-color-tertiary);
+  //background: url("https://assets.pokemon.com/static2/_ui/img/chrome/body_bg.png");
   color: $font-color;
 }
 

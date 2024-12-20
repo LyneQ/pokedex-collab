@@ -1,5 +1,6 @@
 interface PokemonData {
     name: string;
+    id: number;
     sprites: {
         front_default: string;
         front_shiny: string;

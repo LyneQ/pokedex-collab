@@ -289,8 +289,11 @@
   align-items: center;
 
   &-arrow {
-     font-size: 2rem;
+    font-size: 2rem;
     margin: 0 5px;
+    @media screen and (max-width: 768px){
+      transform: rotate(90deg);
+    }
   }
 
   &_container {
@@ -324,4 +327,10 @@
       }
     }
   }
+}
+
+.evolution_types {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
