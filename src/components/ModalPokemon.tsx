@@ -1,4 +1,5 @@
 import {useEffect,useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import PokemonType from './PokemonType'
 import SvgComponent from './SvgComponent'
 interface Pokemon {
@@ -7,15 +8,15 @@ interface Pokemon {
 }
 
 export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModal: () => void}) {
-
     const [pokemon, setPokemon] = useState<{ name?: string, stats?: object[{}], 
     types?: object[{}], id?: number}>({})
     const [versionPkemon, setVersionPokemon] = useState<Array<{type: string, img: string}>>([])
     const [versionIndex, setVersionIndex] = useState<number>(0)
-   
-    const  urlpokemon = url.url
+    const navigate = useNavigate();
+    console.log("pokemon.url",url)
+    const urlpokemon = url
     useEffect(() => {
-        fetch(url)
+        fetch(urlpokemon)
         .then(response => response.json())
         .then(data => {
             setPokemon({
@@ -24,7 +25,7 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
                 types: data.types,
                 id: data.id
             });
-            console.log("data-8-pokemon",pokemon)
+            console.log(pokemon)
             setVersionPokemon([
                 {
                     type: 'normal',
@@ -47,6 +48,11 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
     }
 
     const currentVersion = versionPkemon[versionIndex];
+    const handleButtonClick = () => {
+        if (pokemon.id) {
+          navigate(`/pokemon/${pokemon.id}`);
+        }
+      };
 
     return (
         <div  onClick={closeModal} className='modalPokemon'>
@@ -83,7 +89,7 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
                         <h4>Speed</h4>
                     </div>
                 </div>
-                <button className='FichePokemon' onClick={closeModal}>voir plus</button>
+                <button className='FichePokemon' onClick={handleButtonClick} >voir plus</button>
             </div>
            
         </div>

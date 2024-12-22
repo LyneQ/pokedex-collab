@@ -3,6 +3,8 @@ import ListCartPokemon from "../components/ListCartPokemon"
 import '../assets/scss/components/PokemonContainer.scss'
 import dataNames from '../../public/pokemons.json'
 import { PrefetchPageLinks } from "react-router"
+import { stat } from "fs"
+import { url } from "inspector"
 //https://pokeapi.co/api/v2/pokemon?limit=20&offset=0
 
 function App() {
@@ -35,11 +37,10 @@ function App() {
   const handleAutocomplete = () => {
     const searchPokemon = document.querySelector('.searchPokemon') as HTMLInputElement
     const suggestionContainer = document.querySelector('.suggestions') as HTMLUListElement
-    console.log("searchPokemon",suggestionContainer)
     const value = searchPokemon.value
     if (value.length > 0) {
+      // console.log("value",catchData)
       const suggestions = catchData.filter((name: string) => name.toLowerCase().includes(value.toLowerCase()))
-      console.log("suggestions",suggestions)
       suggestionContainer.innerHTML = ''
       suggestions.forEach((suggestion) => {
         const li = document.createElement('li')
@@ -49,11 +50,19 @@ function App() {
         fetch(`https://pokeapi.co/api/v2/pokemon/${suggestion.toLowerCase()}`)
           .then(response => response.json())
           .then(data => {
-            setPokemons([data.species])
+            // setPokemons([data.species])
+            // console.log("data",pokemons)
             
           })
       })
     } else {
+      fetch('https://pokeapi.co/api/v2/pokemon?limit=20&offset=0')
+      .then(response => response.json())
+      .then(data => {
+        setPokemons(data.results)
+        setNextUrl(data.next)
+        setCatchData(dataNames)
+      })
       maskSuggestion()
     }
   }
@@ -61,11 +70,21 @@ function App() {
   const handleSuggestionClick = (suggestion: string) => {
     const searchPokemon = document.querySelector('.searchPokemon') as HTMLInputElement
     searchPokemon.value = suggestion
+    console.log("suggestion",searchPokemon.value )
     fetch(`https://pokeapi.co/api/v2/pokemon/${suggestion.toLowerCase()}`)
     .then(response => response.json())
     .then(data => {
+      console.log("data - 1",data)
       maskSuggestion()
-      setPokemons([data.species])
+      setPokemons([
+        {
+          name: data.name,
+          id: data.id,
+          type: data.types,
+          stats  : data.stats,
+          url: `https://pokeapi.co/api/v2/pokemon/${data.id}/`
+        }
+      ])
     })
     
   }
@@ -74,18 +93,6 @@ function App() {
     const suggestionContainer = document.querySelector('.suggestions') as HTMLUListElement
     suggestionContainer.innerHTML = ''
   }
-  useEffect(() => {
-    const suggestionContainer = document.querySelector('.suggestions') as HTMLUListElement
-   if(suggestionContainer.innerHTML === ''){
-      fetch('https://pokeapi.co/api/v2/pokemon?limit=20&offset=0')
-      .then(response => response.json())
-      .then(data => {
-        setPokemons(data.results)
-        setNextUrl(data.next)
-        setCatchData(dataNames)
-    })
-   }
-  }, [pokemons])
 
   useEffect(() => {
     const suggestionContainer = document.querySelector('.suggestions') as HTMLUListElement

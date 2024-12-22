@@ -13,14 +13,15 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
     // const pokemonId = `${pokemon.url}`.split('/')[6] 
 
     // VM4734:1 Uncaught (in promise) SyntaxError: Unexpected token 'N', "Not Found" is not valid JSON
-
     // at ListCartPokemon.tsx:17
-   
     const fetchinId = () => {
+      console.log("pokemon.url",pokemon.url)
         fetch(pokemon.url)
         .then(response => response.json())
         .then(data => {
+          console.log("data",data)
            const id = data.id
+            console.log("id",id)
             return id
         })
     }
@@ -36,14 +37,16 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
     //         console.log("types-8-pokemon",types)
     //     })
     // }
-    
+    const id = pokemon.url.split('/')[6]
     useEffect(() => {
         fetch(pokemon.url)
         .then(response => response.json())
         .then(data => {
          
             if(data.types === undefined) {
-              const id = fetchinId()
+              console.log("data false")
+              
+              console.log("id-1",id)  
               fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
               .then(response => response.json())
               .then(data => {
@@ -51,22 +54,23 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
                       types: data.types,
                       id :  data.id
                   })
-                  console.log("types-8-pokemon",types)
+                  // console.log("types-8-pokemon",types)
               })
             }else {
                 setTypes({
                     types: data.types,
                     id :  data.id
                 })
-                console.log("types-7-pokemon",types)  
+                
             }
-           
+            // console.log("types-8-pokemon",types)
         })
-    }, [])
+    }, [id])
     const num = parseInt(types.id)
     const formattedId = String(num).padStart(4, '0')
-
+    
     return (
+      
       <>
         <div onClick={() => setPokemonModal(true)} className="pokemonCart">
             <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${types.id}.png`} alt={pokemon.name} />
@@ -74,6 +78,7 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
             <PokemonType type={types.types} />
         </div>
         {pokemonModal && createPortal(
+          
             <ModalPokemon url={pokemon.url} closeModal={() => setPokemonModal(false)} />, 
             document.body
         )}
