@@ -1,8 +1,6 @@
 @use "variables" as *;
 @use "reset";
 
-@use "./routes/pokemon";
-
 html {
   font-size: $font-size;
 }
