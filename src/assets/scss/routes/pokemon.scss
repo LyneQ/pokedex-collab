@@ -1,5 +1,14 @@
 @use "../variables.scss" as *;
 
+button {
+
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .list_container {
   @media screen and (max-width: 600px) {
     display: flex;

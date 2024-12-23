@@ -4,7 +4,7 @@ import type {evolutionChain, PokemonData} from '../types/interfaces';
 import '../assets/scss/routes/Pokemon.scss';
 import PokemonType from "../components/PokemonType.tsx";
 import AudioPlayer from "../components/AudioPlayer.tsx";
-import PokemonStatsChart from "../assets/scss/components/PokemonStatsChart.tsx";
+import PokemonStatsChart from "../components/PokemonStatsChart.tsx";
 import {JSX} from 'react/jsx-runtime';
 
 export default function Pokemon() {
@@ -156,6 +156,7 @@ export default function Pokemon() {
                         onClick={toggleShiny}
                         alt={'test'}/>
                     <AudioPlayer audioLink={`https://pokemoncries.com/cries-old/${params.id}.mp3`}/>
+                    <button><Link to={'/'}>Back</Link></button>
                 </div>
                 <div className={'pokemon_container_information'}>
                     <div>
