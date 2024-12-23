@@ -1,7 +1,7 @@
 import {Link, useParams} from 'react-router';
 import {MouseEvent, SetStateAction, useEffect, useState} from 'react';
 import type {evolutionChain, PokemonData} from '../types/interfaces';
-import '../assets/scss/components/Pokemon.scss';
+import '../assets/scss/components/pokemon.scss';
 import PokemonType from "../components/PokemonType.tsx";
 import AudioPlayer from "../components/AudioPlayer.tsx";
 import PokemonStatsChart from "../components/PokemonStatsChart.tsx";
