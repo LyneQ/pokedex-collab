@@ -1,8 +1,6 @@
 import '../assets/scss/components/PokemonType.scss'
 
-
-export default function PokemonType({type}: {type: {type: {name: string}}[]}) {
-    
+export default function PokemonType({type}: {type: string}) {
     const colors = [
         { type: 'bug', hex: "#A8B820" },
         { type: 'dark', hex: "#705848" },
@@ -24,18 +22,6 @@ export default function PokemonType({type}: {type: {type: {name: string}}[]}) {
         { type: 'water', hex: "#6890F0" }
     ];
 
-    
-    if (!type) return null;
-    return (
-        <div className="pokemonType">
-            {type.map((t: any, index: number) => {
-                const color = colors.find(c => c.type === t.type.name)
-                return (
-                    <span key={index} className="type" style={{backgroundColor: color?.hex}}>
-                        {t.type.name}
-                </span>
-            )
-        })}
-        </div>
-    )
+    return <span className="pokemon-type" style={{backgroundColor: colors.find(c => c.type === type)?.hex}}>{type}</span>
+
 }

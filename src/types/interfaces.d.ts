@@ -44,9 +44,23 @@ interface PokemonData {
     };
 }
 
-export interface EvolutionChain {
+interface EvolutionChain {
     species: string;
     url: string;
 }
 
-export type {PokemonData, evolutionChain};
+interface Types {
+    type?: string;
+    url?: string;
+}
+
+interface PokemonUrl {
+    url: string
+}
+
+interface Type {
+    slot: number,
+    type: { name: string, url: string }
+}
+
+export type {PokemonData, PokemonUrl, evolutionChain, Types, Type};

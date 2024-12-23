@@ -2,13 +2,9 @@ import { useState, useEffect } from "react"
 import ListCartPokemon from "../components/ListCartPokemon"
 import '../assets/scss/components/PokemonContainer.scss'
 import dataNames from '../../public/pokemons.json'
-import { PrefetchPageLinks } from "react-router"
-import { stat } from "fs"
-import { url } from "inspector"
-//https://pokeapi.co/api/v2/pokemon?limit=20&offset=0
 
 function App() {
-  const [pokemons, setPokemons] = useState<object[]>([{name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/'}])
+  const [pokemons, setPokemons] = useState<{name: string, url: string}[]>()
   const [nextUrl, setNextUrl] = useState<string | null>(null)
   const [catchData, setCatchData] = useState<string[]>([])
 
@@ -28,7 +24,7 @@ function App() {
       fetch(nextUrl)
       .then(response => response.json())
       .then(data => {
-        setPokemons(prevPokemons => [...prevPokemons, ...data.results])  
+        setPokemons(prevPokemons => [...(prevPokemons || []), ...data.results])
         setNextUrl(data.next)
       })
     }
@@ -72,9 +68,6 @@ function App() {
       setPokemons([
         {
           name: data.name,
-          id: data.id,
-          type: data.types,
-          stats  : data.stats,
           url: `https://pokeapi.co/api/v2/pokemon/${data.id}/`
         }
       ])
@@ -96,6 +89,8 @@ function App() {
       }
     })
   }, [])
+
+  console.log(pokemons)
 
   return (
     <>
@@ -121,15 +116,14 @@ function App() {
         
         {pokemons && (
           <div className="pokedexGrid">
-            {pokemons.map((pokemon: object,index: number) => (
-              <ListCartPokemon key={index} pokemon={pokemon}  />
+            {pokemons.map((pokemon: {name: string, url: string},index: number) => (
+                <ListCartPokemon key={index} name={pokemon.name} url={pokemon.url} />
             ))}
           </div>
         )}
         <button className="showMore" onClick={handleShowMore}>Show more</button>
       </div>
     </div>
-      {/* <PokemonType type={'grass'} /> */}
     </>
   )
 }

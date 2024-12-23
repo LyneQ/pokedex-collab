@@ -1,25 +1,28 @@
 import {useEffect,useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import PokemonType from './PokemonType'
 import SvgComponent from './SvgComponent'
-interface Pokemon {
-    name: string,
-    url: string
-}
+import type { PokemonData } from '../types/interfaces'
 
-export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModal: () => void}) {
-    const [pokemon, setPokemon] = useState<{ name?: string, stats?: object[{}], 
-    types?: object[{}], id?: number}>({})
+export default function ModalPokemon({url, closeModal}: {url: string, closeModal: () => void}) {
+    const [pokemon, setPokemon] = useState<PokemonData>()
     const [versionPkemon, setVersionPokemon] = useState<Array<{type: string, img: string}>>([])
     const [versionIndex, setVersionIndex] = useState<number>(0)
     const navigate = useNavigate();
     console.log("pokemon.url",url)
     const urlpokemon = url
     useEffect(() => {
-        fetch(urlpokemon)
+        fetch(urlpokemon.toString())
         .then(response => response.json())
         .then(data => {
             setPokemon({
+                abilities: [],
+                damage_relations: {double_damage_from: []},
+                flavor_text_entries: [],
+                genera: [],
+                height: 0,
+                sprites: {front_default: "", front_shiny: ""},
+                weight: 0,
                 name: data.name,
                 stats: data.stats,
                 types: data.types,
@@ -49,8 +52,8 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
 
     const currentVersion = versionPkemon[versionIndex];
     const handleButtonClick = () => {
-        if (pokemon.id) {
-          navigate(`/pokemon/${pokemon.id}`);
+        if (pokemon!.id) {
+          navigate(`/pokemon/${pokemon!.id}`);
         }
       };
 
@@ -58,34 +61,34 @@ export default function ModalPokemon({url, closeModal}: {url: Pokemon, closeModa
         <div  onClick={closeModal} className='modalPokemon'>
             <div onClick={(e) => e.stopPropagation()}
              className="pokemonCenter pokemon-front">
-                <SvgComponent types={pokemon.types}/>
+                <SvgComponent types={pokemon!.types}/>
                 <div className="hp">
                     <p className='nameHp'>HP : </p>
-                    <p className='valueHp'>{pokemon.stats?.[0]?.base_stat}</p>
+                    <p className='valueHp'>{pokemon!.stats?.[0]?.base_stat}</p>
                 </div>
                 <div onClick = {() => toggleimage(1)} 
                  className="pokemonCenterCard">
                     {currentVersion && (
                         <>
                             <p className='name'><span>{currentVersion.type}</span> </p>
-                            <img src={currentVersion.img} alt={pokemon.name} />
+                            <img src={currentVersion.img} alt={pokemon!.name} />
                         </>
                     )}
-                    <h3>{pokemon.name}</h3>
-                    <PokemonType type={pokemon.types} />
+                    <h3>{pokemon!.name}</h3>
+                    <PokemonType type={pokemon!.types.toString()} />
                     
                 </div>
                 <div className="stats">
                     <div className="attack">
-                        <p>{pokemon.stats?.[1]?.base_stat}</p>
+                        <p>{pokemon!.stats?.[1]?.base_stat}</p>
                         <h4>Attack</h4>
                     </div>
                     <div className="defense">
-                        <p>{pokemon.stats?.[2]?.base_stat}</p>
+                        <p>{pokemon!.stats?.[2]?.base_stat}</p>
                         <h4>Defense</h4>
                     </div>
                     <div className="speed">
-                        <p>{pokemon.stats?.[5]?.base_stat}</p>
+                        <p>{pokemon!.stats?.[5]?.base_stat}</p>
                         <h4>Speed</h4>
                     </div>
                 </div>
