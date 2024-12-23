@@ -1,16 +1,5 @@
 {
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Permissions-Policy",
-          "value": "geolocation=(), microphone=()"
-        }
-      ]
-    }
-  ],
-  "rewrites": [],
-  "redirects": [],
-  "cleanUrls": true
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
