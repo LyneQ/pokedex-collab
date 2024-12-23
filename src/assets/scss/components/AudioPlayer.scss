@@ -1,0 +1,36 @@
+@use "../variables.scss" as *;
+.audio-player {
+  display: flex;
+  align-items: center;
+  background-color: $background-color-secondary;
+  border: 2px solid $border-color;
+  border-radius: 10px;
+  padding: 10px;
+  gap: 10px;
+}
+
+button {
+  background-color: $border-color;
+  color: $font-color;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+input[type="range"] {
+  width: 100%;
+  appearance: none;
+  background-color: $border-color;
+  height: 5px;
+  border-radius: 5px;
+
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        background-color: $font-color;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+}
