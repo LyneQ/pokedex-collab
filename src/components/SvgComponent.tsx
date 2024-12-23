@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function SvgComponent({ types }: { types: any[] }) {
     const colors = [
         { type: 'bug', hex: "#A8B820" },

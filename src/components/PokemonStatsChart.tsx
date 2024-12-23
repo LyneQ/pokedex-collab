@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import CanvasJSReact from '@canvasjs/react-charts';
-import type {PokemonData} from '../../../types/interfaces';
+import type {PokemonData} from '../types/interfaces';
 
 
 const CanvasJS = CanvasJSReact.CanvasJS;
