@@ -47,13 +47,6 @@ function App() {
         li.className = 'suggestion'
         li.textContent = suggestion
         suggestionContainer.appendChild(li)
-        fetch(`https://pokeapi.co/api/v2/pokemon/${suggestion.toLowerCase()}`)
-          .then(response => response.json())
-          .then(data => {
-            // setPokemons([data.species])
-            // console.log("data",pokemons)
-            
-          })
       })
     } else {
       fetch('https://pokeapi.co/api/v2/pokemon?limit=20&offset=0')

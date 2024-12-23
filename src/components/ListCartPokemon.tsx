@@ -25,18 +25,6 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
             return id
         })
     }
-    // function fetchType() {
-    //     const id = fetchinId()
-    //     fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         setTypes({
-    //             types: data.types,
-    //             id :  data.id
-    //         })
-    //         console.log("types-8-pokemon",types)
-    //     })
-    // }
     const id = pokemon.url.split('/')[6]
     useEffect(() => {
         fetch(pokemon.url)
@@ -54,7 +42,7 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
                       types: data.types,
                       id :  data.id
                   })
-                  // console.log("types-8-pokemon",types)
+              
               })
             }else {
                 setTypes({
@@ -63,7 +51,7 @@ export default function ListCartPokemon({pokemon}: {pokemon: any}) {
                 })
                 
             }
-            // console.log("types-8-pokemon",types)
+            
         })
     }, [id])
     const num = parseInt(types.id)
