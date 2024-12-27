@@ -180,6 +180,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+       
         svg{
            width: 100%;
         }
@@ -247,7 +248,7 @@
                 justify-content: center;
                 align-items: center;
                 margin-top: 10px;
-                
+                gap: 10px;
                 .type {
                     padding: 0.5rem;
                     margin: 0.5rem;
@@ -334,6 +335,10 @@
                     font-size: 1.2rem;
                 }
                 .pokemonType {
+                    gap: 5px;
+                    margin-top: 5px;
+                    flex-direction: column;
+                    
                     .type {
                         font-size: 1rem;
                     }
@@ -341,5 +346,38 @@
             }
         }
     }
+
+    .modalPokemon{
+        .pokemonCenter{
+            min-width: 150px;
+            .pokemonCenterCard{
+                .pokemonType{
+                    flex-direction: column;
+                }
+                .name{
+                    font-size: 0.8rem;
+                    span{
+                        font-size: 1rem;
+                    }
+                }
+                img {
+                    width: 150px;
+                    height: 150px;
+                }
+                h3 {
+                    font-size: 1rem;
+                }
+            }
+            .stats{
+                p{
+                    font-size: 1rem;
+                }
+                h4{
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+   
     
 }
