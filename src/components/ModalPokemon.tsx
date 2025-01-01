@@ -97,7 +97,7 @@ export default function ModalPokemon({url, closeModal}: {url: string, closeModal
                         <h4>Speed</h4>
                     </div>
                 </div>
-                <button className='FichePokemon' onClick={handleButtonClick} >voir plus</button>
+                <button className='FichePokemon' onClick={handleButtonClick} >show more</button>
             </div>
            
         </div>
