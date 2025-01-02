@@ -6,6 +6,10 @@
         {
           "key": "Permissions-Policy",
           "value": "geolocation=(), microphone=(), camera=()"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "fullscreen=(self)"
         }
       ]
     }
